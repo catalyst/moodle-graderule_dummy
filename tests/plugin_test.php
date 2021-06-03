@@ -24,6 +24,8 @@
 
 namespace graderule_dummy;
 
+use core\grade\rule\factory;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -37,7 +39,7 @@ class graderule_dummy_plugin_testcase extends \advanced_testcase {
     private $generator;
     private $gradeitems;
 
-    public function setUp() {
+    public function setUp(): void {
 
         parent::setUp();
 
@@ -64,11 +66,11 @@ class graderule_dummy_plugin_testcase extends \advanced_testcase {
         // Check that one of the grade item is there.
         $this->assertTrue($DB->record_exists('grade_items', ['id' => $this->gradeitems[1]->id]));
 
-        $dummy = new dummy(1, $this->gradeitems[1]->id);
-        $dummy->save($this->gradeitems[1]);
+        $dummy = factory::create('dummy', $this->gradeitems[1], null);
+        $dummy->save();
 
         $this->assertTrue($DB->record_exists(
-            'graderule_dummy', ['gradeitem' => $this->gradeitems[1]->id]
+            'graderule_dummy', ['id' => $dummy->dummyid]
         ));
     }
 
@@ -79,17 +81,17 @@ class graderule_dummy_plugin_testcase extends \advanced_testcase {
         $this->assertTrue($DB->record_exists('grade_items', ['id' => $this->gradeitems[2]->id]));
 
         // Make it into a dummy item.
-        $dummy = new dummy(1, $this->gradeitems[2]->id);
-        $dummy->save($this->gradeitems[2]);
+        $dummy = factory::create('dummy', $this->gradeitems[2], null);
+        $dummy->save();
 
         $this->assertTrue($DB->record_exists(
-            'graderule_dummy', ['gradeitem' => $this->gradeitems[2]->id]
+            'graderule_dummy', ['id' => $dummy->dummyid]
         ));
 
         // Delete it.
-        $dummy->delete($this->gradeitems[2]);
+        $dummy->delete();
         $this->assertFalse($DB->record_exists(
-            'graderule_dummy', ['gradeitem' => $this->gradeitems[2]->id]
+            'graderule_dummy', ['id' => $dummy->dummyid]
         ));
     }
 
@@ -100,16 +102,16 @@ class graderule_dummy_plugin_testcase extends \advanced_testcase {
         $this->assertTrue($DB->record_exists('grade_items', ['id' => $this->gradeitems[2]->id]));
 
         // Make it into a dummy item.
-        $dummy = new dummy(1, $this->gradeitems[3]->id);
-        $dummy->save($this->gradeitems[3]);
+        $dummy = factory::create('dummy', $this->gradeitems[3], null);
+        $dummy->save();
 
         $this->assertTrue($DB->record_exists(
-            'graderule_dummy', ['gradeitem' => $this->gradeitems[3]->id]
+            'graderule_dummy', ['id' => $dummy->dummyid]
         ));
 
         $fetched = \grade_item::fetch(['id' => $this->gradeitems[3]->id]);
 
-        $this->assertEquals('dummy', $fetched->rules[0]);
+        $this->assertEquals('dummy', $fetched->rules[0]->get_name());
     }
 
     public function test_grade_items_grading_rules() {
@@ -120,13 +122,13 @@ class graderule_dummy_plugin_testcase extends \advanced_testcase {
         $this->assertTrue($DB->record_exists('grade_items', ['id' => $this->gradeitems[5]->id]));
 
         // Make them into a dummy items.
-        $dummy = new dummy(1, $this->gradeitems[4]->id);
-        $dummy->save($this->gradeitems[4]);
-        $dummy = new dummy(1, $this->gradeitems[5]->id);
-        $dummy->save($this->gradeitems[5]);
+        $dummy = factory::create('dummy', $this->gradeitems[4], null);
+        $dummy->save();
+        $dummy = factory::create('dummy', $this->gradeitems[5], null);
+        $dummy->save();
 
         $fetched = \grade_item::fetch_all(['courseid' => $this->course->id, 'itemtype' => 'manual']);
-        $this->assertEquals('dummy', $fetched[$this->gradeitems[4]->id]->rules[0]);
-        $this->assertEquals('dummy', $fetched[$this->gradeitems[5]->id]->rules[0]);
+        $this->assertEquals('dummy', $fetched[$this->gradeitems[4]->id]->rules[0]->get_name());
+        $this->assertEquals('dummy', $fetched[$this->gradeitems[5]->id]->rules[0]->get_name());
     }
 }

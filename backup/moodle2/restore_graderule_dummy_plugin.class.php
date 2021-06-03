@@ -59,19 +59,9 @@ class restore_graderule_dummy_plugin extends restore_graderule_plugin {
     public function process_graderule_dummy($data) {
         global $DB;
 
-        $data = (object)$data;
-        $oldid = $data->id;
+        $data = (object) $data;
+        $data->gradingruleid = $this->get_mappingid('grade_rule', $data->gradingruleid);
 
-        $data->gradeitem = $this->get_new_parentid('grade_item');
-
-        $newid = $DB->insert_record('graderule_dummy', $data);
-
-        if (!$graderuleid = $this->get_new_parentid('grade_rule')) {
-            if (!$graderuleid = $this->get_new_parentid('activity_grade_rule')) {
-                // TODO: Do we want to throw an exception here?
-            }
-        }
-
-        $this->adjust_grading_rule_record($graderuleid, $newid);
+        $DB->insert_record('graderule_dummy', $data);
     }
 }

@@ -31,6 +31,7 @@ require_once($CFG->dirroot . '/lib/grade/grade_item.php');
 require_once($CFG->dirroot . '/backup/util/includes/backup_includes.php');
 require_once($CFG->dirroot . '/backup/util/includes/restore_includes.php');
 
+use core\grade\rule\factory;
 
 /**
  * Test backup and restore
@@ -44,7 +45,6 @@ class graderule_dummy_backup_test extends \advanced_testcase {
      * Test course
      */
     protected $course;
-
 
     public function test_backup_restore() {
         global $CFG, $DB;
@@ -81,11 +81,12 @@ class graderule_dummy_backup_test extends \advanced_testcase {
         $dummyitem = new \grade_item($this->getDataGenerator()->create_grade_item($params), false);
 
         // Make it into a dummy item.
-        $dummy = new dummy(1, $dummyitem->id);
-        $dummy->save($dummyitem);
+        $dummy = factory::create('dummy', $gradeitem, null);
+        $dummy->save();
 
         $fetcheddummyitem = \grade_item::fetch(['id' => $dummyitem->id]);
-        $this->assertTrue(in_array('dummy', $fetcheddummyitem->rules));
+        $this->assertCount(1, $fetcheddummyitem->rules);
+        $this->assertEquals('dummy', $fetcheddummyitem->rules[0]->get_name());
 
         // Backup the course.
         $bc = new \backup_controller(\backup::TYPE_1COURSE, $course->id, \backup::FORMAT_MOODLE,
@@ -126,7 +127,7 @@ class graderule_dummy_backup_test extends \advanced_testcase {
             $itemcount ++;
             if ($item->itemname == 'Dummy Item') {
                 $this->compare($item, $dummyitem);
-                $this->assertTrue(in_array('dummy', $item->rules));
+                $this->assertEquals('dummy', $item->rules[0]->get_name());
             } else if ($item->itemname == 'Grade Item') {
                 $this->compare($item, $gradeitem);
             } else if ($item->itemname !== null) {

@@ -32,9 +32,8 @@ class backup_graderule_dummy_plugin extends backup_graderule_plugin {
      * Returns the dummy rule information to attach to grade_rule element
      */
     protected function define_grade_rule_plugin_structure() {
-
         // Define the virtual plugin element with the condition to fulfill.
-        $plugin = $this->get_plugin_element(null, '../../plugin', $this->pluginname);
+        $plugin = $this->get_plugin_element(null, '../../rulename', $this->pluginname);
 
         // Create one standard named plugin element (the visible container).
         $pluginwrapper = new backup_nested_element($this->get_recommended_name());
@@ -42,20 +41,20 @@ class backup_graderule_dummy_plugin extends backup_graderule_plugin {
         // Connect the visible container ASAP.
         $plugin->add_child($pluginwrapper);
 
-        $dummy = new backup_nested_element('dummy', ['id'], ['dummy']);
+        $dummy = new backup_nested_element('dummy', ['id'], ['gradingruleid', 'isdummy']);
 
         // Now the own qtype tree.
         $pluginwrapper->add_child($dummy);
 
         // Set source to populate the data.
         $dummy->set_source_table('graderule_dummy',
-            ['id' => '../../../../pluginid']);
+            ['gradingruleid' => '../../../../id']);
 
         return $plugin;
     }
 
     /**
-     * Returns the dummy rile information to attach to activity_grade_rule element
+     * Returns the dummy rule information to attach to activity_grade_rule element
      */
     protected function define_activity_grade_rule_plugin_structure() {
         return $this->define_grade_rule_plugin_structure();

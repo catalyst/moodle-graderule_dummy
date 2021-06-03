@@ -7,11 +7,12 @@
     <TABLE NAME="graderule_dummy" COMMENT="Track the dummy status of a grade item.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="gradeitem" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Foreign key to the grade item in question."/>
-        <FIELD NAME="dummy" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false" COMMENT="1 (true) for Dummy"/>
+        <FIELD NAME="gradingruleid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Foreign key to the grade rule in question."/>
+        <FIELD NAME="isdummy" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false" COMMENT="1 (true) for Dummy"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="gradingruleid" TYPE="foreign" FIELDS="gradingruleid" REFTABLE="grading_rules" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
   </TABLES>

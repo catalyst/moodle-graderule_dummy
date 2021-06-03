@@ -24,8 +24,11 @@
 
 defined('MOODLE_INTERNAL') || die('');
 
-$string['enabled'] = 'Is Dummy Item';
-$string['pluginname'] = 'Dummy Status';
+$string['enabled'] = 'Do you want to enable {$a}';
+$string['pluginname'] = 'Dummy grade rule';
 $string['dummy'] = 'Dummy Item';
+$string['dummysettings'] = 'Dummy settings';
+$string['graderulename'] = 'Dummy grade rule name';
+$string['graderulename_help'] = 'This is the dummy grade rule name';
 $string['nonexam'] = 'Non-exam';
 $string['privacy:metadata'] = 'Grade rules do not store user data.';

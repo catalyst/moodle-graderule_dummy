@@ -15,29 +15,28 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Factory class for dummy
+ * Grade rule for 'Dummy Item' status
  *
- * @package     graderule_dummy
- * @author      Marcus Boon<marcus@catalyst-au.net>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   graderule_dummy
+ * @author    Marcus Boon <marcus@catalyst-au.net>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace graderule_dummy;
 
-use core\grade\rule;
-
 defined('MOODLE_INTERNAL') || die('');
 
-class factory implements \core\grade\rule\factory_interface {
+class helper {
 
     /**
-     * @param string $data
-     * @return \graderule_dummy\dummy
+     * Delete the record from the 'graderule_dummy' table.
+     *
+     * @param int $gradingruleid
+     * @throws \dml_exception
      */
-    public static function create($plugin, $instanceid) {
-        if ($instanceid == -1) {
-            return new dummy(false, 0);
-        }
-        return dao::get_instance_from_id($instanceid);
+    public static function delete_instance(int $gradingruleid) {
+        global $DB;
+
+        $DB->delete_records('graderule_dummy', ['gradingruleid' => $gradingruleid]);
     }
 }

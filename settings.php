@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of the Certificate module for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,17 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Event observers.
+ * Grade rule dummy settings.
  *
- * @package     graderule_dummy
- * @author      Marcus Boon<marcus@catalyst-au.net>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    graderule_dummy
+ * @copyright  2021 Mark Nelson <marknelson@catalyst-au.net>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
 
-$observers = [
-    [
-        'eventname' => '\core\event\course_restored',
-        'callback'  => '\graderule_dummy\observer::course_restored'
-    ],
-];
+defined('MOODLE_INTERNAL') || die;
+
+$settings->add(new admin_setting_configtext('graderule_dummy/graderulename',
+    get_string('graderulename', 'graderule_dummy'), get_string('graderulename_help', 'graderule_dummy'),
+    get_string('pluginname', 'graderule_dummy'), PARAM_TEXT));
