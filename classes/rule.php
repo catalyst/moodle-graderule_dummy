@@ -106,6 +106,10 @@ class rule implements rule_interface {
      * @return float
      */
     public function final_grade_modifier(int $userid, float $currentvalue): float {
+        if ($currentvalue == 60) {
+            return 100;
+        }
+
         return $currentvalue;
     }
 
@@ -118,6 +122,10 @@ class rule implements rule_interface {
      * @return string
      */
     public function letter_modifier($value, int $userid, string $currentsymbol): string {
+        if ($currentsymbol == 'A') {
+            return 'PASS';
+        }
+
         return $currentsymbol;
     }
 
